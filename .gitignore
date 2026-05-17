@@ -53,3 +53,12 @@ htmlcov/
 # Alembic — keep migrations, ignore local SQLite if used
 *.sqlite
 *.db
+
+# OMC (Claude Code orchestration state)
+.omc/
+
+# Misc
+.cache/
+.turbo/
+.vercel/
+.railway/
