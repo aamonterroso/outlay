@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -27,16 +27,30 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
 
-    # Database (placeholder, Fase 2)
-    database_url: str = "postgresql+psycopg://placeholder"
+    # Database
+    database_url: str = Field(
+        ...,
+        description="Pooled Postgres connection for the app. Driver: postgresql+psycopg.",
+    )
+    database_url_direct: str = Field(
+        ...,
+        description="Direct (non-pooled) Postgres connection for Alembic migrations.",
+    )
 
-    # R2 (placeholder, Fase 4)
+    @field_validator("database_url", "database_url_direct")
+    @classmethod
+    def must_use_psycopg_driver(cls, v: str) -> str:
+        if not v.startswith("postgresql+psycopg://"):
+            raise ValueError("DATABASE_URL must use postgresql+psycopg:// driver prefix")
+        return v
+
+    # R2 (Fase 4)
     r2_account_id: str = ""
     r2_access_key_id: str = ""
     r2_secret_access_key: str = ""
     r2_bucket: str = ""
 
-    # Anthropic (placeholder, Fase 8)
+    # Anthropic (Fase 8)
     anthropic_api_key: str = ""
 
 
