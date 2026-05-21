@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from outlay_api.config import get_settings
 from outlay_api.logging import configure_logging
+from outlay_api.middleware import TenantContextMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,10 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
+    # Starlette wraps in reverse-add order, so the last add_middleware call
+    # becomes the outermost layer. Register CORS LAST so preflight OPTIONS
+    # short-circuit before any app logic (including tenant resolution) runs.
+    app.add_middleware(TenantContextMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
