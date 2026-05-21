@@ -4,7 +4,7 @@ Decisions worth documenting. Format follows a lightweight version of Michael Nyg
 
 ## Index
 
-- ADR-001: Multi-tenancy via shared schema with tenant_id (pending)
+- [ADR-001: Multi-tenancy via shared schema with tenant_id](ADR-001-multi-tenancy.md)
 - ADR-002: Idempotency via UNIQUE constraint (pending)
 - ADR-003: Agent tools, read-only scope and granularity (pending)
 - ADR-004: Object storage with presigned URLs (pending)
